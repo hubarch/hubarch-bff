@@ -1,0 +1,13 @@
+.idea
+src
+build/tests
+build/example
+example
+tests
+.babelrc
+.eslintignore
+.eslintrc
+.gitignore
+.nvmrc
+README.md
+
