@@ -4,6 +4,8 @@ const nodeExternals = require('webpack-node-externals');
 const NodemonPlugin = require('nodemon-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
 
+const env = process?.env.NODE_ENV ?? 'development';
+
 module.exports = {
   entry: './src/index.ts',
   output: {
@@ -38,7 +40,7 @@ module.exports = {
   },
   plugins: [
     new Dotenv({
-      path: `./.env.${process.env.NODE_ENV}`,
+      path: `./.env.${env}`,
     }),
     new NodemonPlugin(),
   ],
