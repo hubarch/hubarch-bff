@@ -4,6 +4,8 @@ import { Octokit } from 'octokit';
 const app = express();
 const port = process.env.PORT || 3001;
 
+console.log(process.env.GH_TOKEN);
+
 const octokit = new Octokit({
   auth: process.env.GH_TOKEN,
 });
@@ -28,25 +30,44 @@ app.get('/', async (req, res) => {
         const name = each['full_name'];
         const prefix = name?.split('-')?.[0] ?? '';
 
-        return {
-          name,
-          prefix,
-        };
+        // return {
+        //   name,
+        //   prefix,
+        // };
+        return name;
       });
 
     objs.push(...filt);
   }
 
-  const grouped = groupBy(objs, 'prefix');
-  res.json(grouped);
+  // const grouped = groupBy(objs, 'prefix');
+  res.json(objs);
 });
 
 app.listen(port, () => {
   console.log(`app is running at ${port}`);
 });
 
-const groupBy = function (xs: any, key: any) {
-  return xs.reduce(function (rv: any, x: any) {
+app.get('/starts', async (req, res) => {
+  const x = await octokit.request('GET /user/starred', {
+    headers: {
+      'X-GitHub-Api-Version': '2022-11-28',
+    },
+  });
+  // res.json(
+  //   x.data.map(e => {
+  //     return {
+  //       name: e['full_name'],
+  //       url: e['html_url'],
+  //     };
+  //   }),
+  // );
+
+  res.json(x);
+});
+
+const groupBy = function(xs: any, key: any) {
+  return xs.reduce(function(rv: any, x: any) {
     (rv[x[key]] = rv[x[key]] || []).push(x);
     return rv;
   }, {});
